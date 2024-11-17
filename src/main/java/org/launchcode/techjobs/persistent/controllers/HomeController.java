@@ -6,7 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
+import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
+import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.launchcode.techjobs.persistent.models.Employer;
+import org.launchcode.techjobs.persistent.models.Job;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +21,16 @@ import java.util.Optional;
  */
 @Controller
 public class HomeController {
+
+    @Autowired
+    private EmployerRepository employerRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private SkillRepository skillRepository; // Add this field
+
 
     @RequestMapping("/")
     public String index(Model model) {
@@ -27,9 +42,9 @@ public class HomeController {
 
     @GetMapping("add")
     public String displayAddJobForm(Model model) {
-	model.addAttribute("title", "Add Job");
+	    model.addAttribute("employers", employerRepository.findAll());
         model.addAttribute(new Job());
-        return "add";
+        return "jobs/add";
     }
 
     @PostMapping("add")
@@ -38,7 +53,13 @@ public class HomeController {
 
         if (errors.hasErrors()) {
 	    model.addAttribute("title", "Add Job");
-            return "add";
+            return "jobs/add";
+        }
+
+        Optional<Employer> optEmployer = employerRepository.findById(employerId);
+        if (optEmployer.isPresent()) {
+            Employer employer = optEmployer.get();
+            newJob.setEmployer(employer);
         }
 
         return "redirect:";
