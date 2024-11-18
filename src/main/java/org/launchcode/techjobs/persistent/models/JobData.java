@@ -49,9 +49,13 @@ public class JobData {
         String theValue = "";
         if (fieldName.equals("name")){
             theValue = job.getName();
-        } else if (fieldName.equals("employer")){
+        } else if (fieldName.equals("employer")) {
             theValue = job.getEmployer().toString();
-        } else {
+        }
+          else if (fieldName.equals("skill")){ // so dumb, I spent 5 hours trying to diagnose this because I wrote skills instead of skill
+                theValue = job.getSkills().toString();
+            }
+         else {
             theValue = null;
         }
         return theValue;

@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
+import org.launchcode.techjobs.persistent.models.Skill;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -23,8 +24,12 @@ public class Job extends AbstractEntity {
     private Employer employer;
 
     @ManyToMany
-    private List<Skill> skills;
-
+    @JoinTable(
+            name = "job_skills",
+            joinColumns = @JoinColumn(name = "job_id"),
+            inverseJoinColumns = @JoinColumn(name = "skills_id")
+    )
+    private List<Skill> skills = new ArrayList<>();
 
 
     // Fix error of calling empty constructor with no parameters

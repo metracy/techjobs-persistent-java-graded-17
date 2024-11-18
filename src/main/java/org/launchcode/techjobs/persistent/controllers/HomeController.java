@@ -59,18 +59,23 @@ public class HomeController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
+            model.addAttribute("employers", employerRepository.findAll());
+            model.addAttribute("skills", skillRepository.findAll());
             return "add";
         }
-        List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
-        newJob.setSkills(skillObjs);
+
 
         Optional<Employer> optEmployer = employerRepository.findById(employerId);
         if (optEmployer.isPresent()) {
             Employer employer = optEmployer.get();
             newJob.setEmployer(employer);
         } else {
-            return "redirect:../";
+            return "redirect:/add";
         }
+
+        List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
+        newJob.setSkills(skillObjs);
+
         jobRepository.save(newJob);
         return "redirect:/";
     }
