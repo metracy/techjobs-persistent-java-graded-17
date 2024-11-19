@@ -23,16 +23,17 @@ public class Job extends AbstractEntity {
     @ManyToOne
     private Employer employer;
 
+
+
+    // since I wound up creating the job_skills in mySQL database directly at one point, I'm stuck with this convoluted solution
+    // so that it maps properly.
     @ManyToMany
-    @JoinTable(
-            name = "job_skills",
-            joinColumns = @JoinColumn(name = "job_id"),
-            inverseJoinColumns = @JoinColumn(name = "skills_id")
-    )
+    @JoinTable(name = "job_skills",
+              joinColumns = @JoinColumn(name = "job_id"),
+              inverseJoinColumns = @JoinColumn(name = "skills_id"))
     private List<Skill> skills = new ArrayList<>();
 
-
-    // Fix error of calling empty constructor with no parameters
+    // Fix the error in test that flags if job is constructed without parameters
     public Job() {}
 
     // Constructor to initialize employer
